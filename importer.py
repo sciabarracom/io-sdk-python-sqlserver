@@ -1,7 +1,8 @@
 import pymssql
 import json
 
-query = "select fiscal_code, markdown, subject from messages;"
+query = "select amount, due_date, fiscal_code, invalid_after_due_date, markdown, subject, notice_number from messages;"
+
 
 form = """
 {"form": [
@@ -49,11 +50,21 @@ def main(args):
         row = cursor.fetchone()
         res = []
         while row:
+            print("row ===>>>> :",row)
+            #print("row[0] ======>>>>> :",row[0])
+            #print("row[1] ======>>>>> :",row[1])
+            #print("row[2] ======>>>>> :",row[2])
+            #print("row[3] ======>>>>> :",row[3])
+            #print("row[4] ======>>>>> :",row[4])
+            #print("row[5] ======>>>>> :",row[5])
+            #print("row[6] ======>>>>> :",row[6])
             rec = {}
-            for desc in cursor.description:
-              rec[desc[0]] = row[desc[1]] 
-              res.append(rec)
+            row2import = ""
+            row2import = "{\"amount\": \"%d\", \"due_date\": \"%s\", \"fiscal_code\": \"%s\", \"invalid_after_due_date\": \"%s\", \"markdown\": \"%s\", \"subject\": \"%s\", \"notice_number\": \"%s\" }" % (row[0],row[1],row[2],row[3],row[4],row[5],row[6])
+            print("row2import =======> :", row2import)
+            res.append(row2import)
             row = cursor.fetchone()
+        print("res ========> :",res)
         return { "body": {"data": res}}
     except Exception as e:
       return { "body": {"error": str(e)}}
