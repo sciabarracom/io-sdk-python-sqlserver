@@ -65,7 +65,7 @@ def main(args):
             res.append(row2import)
             row = cursor.fetchone()
         print("res ========> :",res)
-        return { "body": {"data": res}}
+        return { "body": {"data": [json.loads(i) for i in res]}}
     except Exception as e:
       return { "body": {"error": str(e)}}
     
